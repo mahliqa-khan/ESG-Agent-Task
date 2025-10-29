@@ -34,12 +34,12 @@ document_store = {}
 
 def extract_text_locally(pdf_path):
     """Fallback: Extract text from PDF using local libraries"""
-    import pymupdf  # PyMuPDF (fitz)
+    import fitz  # PyMuPDF
 
     print(f"  📚 Using local PDF extraction as fallback...")
 
     try:
-        doc = pymupdf.open(pdf_path)
+        doc = fitz.open(pdf_path)
         pages = []
 
         for page_num in range(len(doc)):
