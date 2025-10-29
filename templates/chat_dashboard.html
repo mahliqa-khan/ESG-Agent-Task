@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESG Chat Analysis - Powered by Qwen 2.5-7B</title>
+    <title>ESG Chat Analysis - Powered by Qwen3-30B</title>
     <style>
         * {
             margin: 0;
@@ -405,7 +405,7 @@
 <body>
     <div class="header">
         <h1>⚡ ESG Chat Analysis</h1>
-        <p>Powered by Qwen 2.5-7B (Hugging Face) - Free GPU-Powered Analysis</p>
+        <p>Powered by Qwen3-30B (OpenRouter) - Free AI-Powered Analysis</p>
     </div>
 
     <div class="container">
@@ -448,7 +448,7 @@
             </div>
 
             <div class="powered-by">
-                Powered by Qwen 2.5-7B (HF)
+                Powered by Qwen3-30B (OpenRouter)
             </div>
         </div>
 
@@ -484,7 +484,7 @@
                     <button onclick="sendChatMessage()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 0.875rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600;">Send</button>
                 </div>
                 <div style="font-size: 0.75rem; color: #6b7280; margin-top: 0.5rem;">
-                    Chat is context-aware of all analyzed documents (powered by Qwen 2.5-7B)
+                    Chat is context-aware of all analyzed documents (powered by Qwen3-30B)
                 </div>
             </div>
         </div>
@@ -822,7 +822,7 @@
             console.log('Chat history reset for new analysis');
 
             // Show loading
-            addMessage('assistant', 'Processing...', '<div class="loading"><div class="spinner"></div><div>Analyzing documents with Qwen 2.5-7B...</div></div>');
+            addMessage('assistant', 'Processing...', '<div class="loading"><div class="spinner"></div><div>Analyzing documents with Qwen3-30B...</div></div>');
 
             // Prepare form data
             const formData = new FormData();
