@@ -252,6 +252,9 @@
             color: #2d3748;
             white-space: pre-wrap;
             line-height: 1.6;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-height: none;
         }
 
         .reasoning-section {
@@ -260,6 +263,8 @@
             padding: 1.25rem;
             border-radius: 8px;
             margin-top: 1rem;
+            max-height: none;
+            overflow-y: auto;
         }
 
         .reasoning-section.hidden {
