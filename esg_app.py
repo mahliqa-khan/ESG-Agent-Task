@@ -2015,7 +2015,7 @@ def aggregate_chunk_results(chunk_results, questions):
 
             # Combine reasoning
             success_ratio = f"{len(chunk_answers)}/{len(chunk_results)}"
-            combined_reasoning = f"Analysis from {success_ratio} chunks. " + "; ".join(chunk_reasonings[:3])
+            combined_reasoning = f"Analysis from {success_ratio} chunks. " + "; ".join(chunk_reasonings)
             if error_chunks:
                 combined_reasoning += f" (Warning: {len(error_chunks)} chunks failed)"
 
