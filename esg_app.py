@@ -1521,12 +1521,12 @@ IMPORTANT:
 
                 try:
                     if provider == 'huggingface':
-                        response = client.chat_completion(
+                        # HuggingFace InferenceClient uses text_generation
+                        response_text = client.text_generation(
+                            mega_prompt,
                             model=model_name,
-                            messages=[{"role": "user", "content": mega_prompt}],
-                            max_tokens=2000
+                            max_new_tokens=2000
                         )
-                        response_text = response.choices[0].message.content
                         print(f"  ✅ Got response from Hugging Face")
                     elif provider in ['qwen', 'openrouter']:
                         response = client.chat.completions.create(
