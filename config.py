@@ -49,7 +49,7 @@ LLM_MODELS = {
         'temperature': 0.7,
     },
     'huggingface': {
-        'model': 'Qwen/Qwen2.5-7B-Instruct',  # FREE GPU-powered Qwen on Hugging Face!
+        'model': 'mistralai/Mistral-7B-Instruct-v0.2',  # FREE GPU-powered Mistral on Hugging Face!
         'temperature': 0.7,
     }
 }
