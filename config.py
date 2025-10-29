@@ -11,6 +11,7 @@ load_dotenv()
 
 # LLM Provider Configuration
 # Options: 'gemini', 'openai', 'anthropic', 'groq', 'openrouter', 'qwen', 'huggingface'
+# Default to Gemini - most reliable free option
 LLM_PROVIDER = os.getenv('LLM_PROVIDER', 'gemini')
 
 # API Keys (set via environment variables)
