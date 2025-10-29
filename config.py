@@ -11,8 +11,8 @@ load_dotenv()
 
 # LLM Provider Configuration
 # Options: 'gemini', 'openai', 'anthropic', 'groq', 'openrouter', 'qwen', 'huggingface'
-# Default to Gemini - most reliable free option
-LLM_PROVIDER = os.getenv('LLM_PROVIDER', 'gemini')
+# Default to OpenRouter with FREE Qwen3-30B model
+LLM_PROVIDER = os.getenv('LLM_PROVIDER', 'openrouter')
 
 # API Keys (set via environment variables)
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
@@ -42,7 +42,7 @@ LLM_MODELS = {
         'temperature': 0.7,
     },
     'openrouter': {
-        'model': 'qwen/qwen-2.5-7b-instruct:free',  # Newer Qwen 2.5 - Free and better!
+        'model': 'qwen/qwen3-30b-a3b:free',  # FREE Qwen3 30B - Working and powerful!
         'temperature': 0.7,
     },
     'qwen': {
