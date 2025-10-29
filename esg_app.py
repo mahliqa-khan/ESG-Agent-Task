@@ -1594,7 +1594,7 @@ IMPORTANT:
                             'question_text': questions_text[:200] + '...' if len(questions_text) > 200 else questions_text,
                             'main_answer': formatted_answer,
                             'score': float(analysis_data.get('overall_score', 0)),
-                            'reasoning': f"Based on scoring criteria: {scoring_criteria[:100]}..." if scoring_criteria else "Analysis completed",
+                            'reasoning': analysis_data.get('analysis', analysis_data.get('reasoning', 'Analysis completed')),
                             'confidence': 0.85,
                             'category': 'ESG Analysis'
                         }]
