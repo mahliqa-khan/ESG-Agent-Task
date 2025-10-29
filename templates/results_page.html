@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoring Results - ESG Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .nav a:hover {
+            text-decoration: underline;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .toggle-label {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e0;
+            transition: .4s;
+            border-radius: 30px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #667eea;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .summary-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .summary-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+
+        .summary-label {
+            font-size: 0.85rem;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .results-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .document-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .document-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .document-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .document-meta {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .results-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .result-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .result-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .question-title {
+            flex: 1;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 1.1rem;
+        }
+
+        .score-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 10px;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-left: 1rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .score-badge.low {
+            background: linear-gradient(135deg, #f56565 0%, #c53030 100%);
+        }
+
+        .score-badge.medium {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+        }
+
+        .score-badge.high {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+
+        .answer-section {
+            background: #f7fafc;
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .answer-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+        }
+
+        .answer-text {
+            color: #2d3748;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .reasoning-section {
+            background: #fffaf0;
+            border-left: 4px solid #ed8936;
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .reasoning-section.hidden {
+            display: none;
+        }
+
+        .category-tag {
+            background: #e6fffa;
+            color: #319795;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .export-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .export-btn:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #718096;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Scoring Results</h1>
+        <p>Document analysis completed</p>
+    </div>
+
+    <div class="nav">
+        <a href="/">← Back to Upload</a>
+        <div class="toggle-container">
+            <span class="toggle-label">Show Reasoning</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="reasoningToggle" onchange="toggleReasoning()">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Summary Section -->
+        <div class="summary-section">
+            <h2>Summary</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-label">Documents Analyzed</div>
+                    <div class="summary-value">{{ results|length }}</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Questions Applied</div>
+                    <div class="summary-value">{{ total_questions }}</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Average Score</div>
+                    <div class="summary-value">{{ "%.1f"|format(avg_score) }}</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Actions</div>
+                    <button class="export-btn" onclick="exportResults()">📥 Export CSV</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results by Document -->
+        <div class="results-grid">
+            {% for doc_result in results %}
+            <div class="document-section">
+                <div class="document-header">
+                    <div class="document-title">📄 {{ doc_result.filename }}</div>
+                    <div class="document-meta">
+                        {{ doc_result.scores|length }} questions scored • Processed {{ doc_result.processed_at }}
+                    </div>
+                </div>
+
+                <div class="results-list">
+                    {% for score in doc_result.scores %}
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div>
+                                <div class="question-title">{{ score.question_text }}</div>
+                                {% if score.category %}
+                                <span class="category-tag">{{ score.category }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="score-badge {{ 'low' if score.score < 2.5 else ('medium' if score.score < 4.0 else 'high') }}">
+                                {{ score.score }}
+                            </div>
+                        </div>
+
+                        <div class="answer-section">
+                            <div class="answer-label">Answer from Document</div>
+                            <div class="answer-text">{{ score.main_answer }}</div>
+                        </div>
+
+                        <div class="reasoning-section hidden">
+                            <div class="answer-label">Scoring Reasoning</div>
+                            <div class="answer-text">{{ score.reasoning }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if not results %}
+        <div class="empty-state">
+            <h3>No results yet</h3>
+            <p>Upload documents and apply questions to see scoring results here.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function toggleReasoning() {
+            const reasoningSections = document.querySelectorAll('.reasoning-section');
+            const isChecked = document.getElementById('reasoningToggle').checked;
+
+            reasoningSections.forEach(section => {
+                if (isChecked) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+        }
+
+        function exportResults() {
+            // Generate CSV export
+            const sessionId = '{{ session_id }}';
+            window.location.href = '/api/export-results/' + sessionId;
+        }
+    </script>
+</body>
+</html>

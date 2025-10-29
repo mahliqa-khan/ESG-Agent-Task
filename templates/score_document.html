@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Score Document - {{ document.filename }} - ESG Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .nav a {
+            color: #667eea;
+            text-decoration: none;
+            margin-right: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .document-info {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-top: 0.25rem;
+        }
+
+        .score-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+        }
+
+        .question-selector {
+            display: flex;
+            gap: 1rem;
+            align-items: end;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .question-preview {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .question-preview.active {
+            display: block;
+        }
+
+        .preview-section {
+            margin-bottom: 1rem;
+        }
+
+        .preview-section h4 {
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .preview-section pre {
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #2d3748;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results-section {
+            margin-top: 2rem;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .result-question {
+            font-weight: 600;
+            color: #2d3748;
+            flex: 1;
+        }
+
+        .score-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-left: 1rem;
+        }
+
+        .score-badge.low {
+            background: linear-gradient(135deg, #f56565 0%, #c53030 100%);
+        }
+
+        .score-badge.medium {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+        }
+
+        .score-badge.high {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+
+        .result-section {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+
+        .result-section h4 {
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .result-section p {
+            color: #2d3748;
+            white-space: pre-wrap;
+        }
+
+        .timestamp {
+            color: #718096;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #718096;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Score Document</h1>
+        <p>{{ document.filename }} - {{ document.company_name }}</p>
+    </div>
+
+    <div class="nav">
+        <a href="/company/{{ document.company_id }}">← Back to {{ document.company_name }}</a>
+        <a href="/scoring-questions">Manage Questions</a>
+    </div>
+
+    <div class="container">
+        <!-- Document Info -->
+        <div class="document-info">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Document Type</div>
+                    <div class="info-value">{{ document.document_type }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Year</div>
+                    <div class="info-value">{{ document.document_year or 'N/A' }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Pages</div>
+                    <div class="info-value">{{ document.total_pages }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scoring Section -->
+        <div class="score-section">
+            <h2 class="section-title">Apply Scoring Question</h2>
+
+            {% if questions %}
+            <div class="question-selector">
+                <div class="form-group">
+                    <label for="questionSelect">Select a Question</label>
+                    <select id="questionSelect" onchange="previewQuestion()">
+                        <option value="">-- Choose a question --</option>
+                        {% for q in questions %}
+                        <option value="{{ q.id }}">{{ q.question_text[:100] }}{{ '...' if q.question_text|length > 100 }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button class="btn" id="applyBtn" onclick="applyQuestion()" disabled>Apply Question</button>
+            </div>
+
+            <!-- Question Preview -->
+            <div class="question-preview" id="questionPreview">
+                <div class="preview-section">
+                    <h4>Main Question</h4>
+                    <p id="previewQuestion"></p>
+                </div>
+                <div class="preview-section">
+                    <h4>Sub-Questions / Criteria</h4>
+                    <pre id="previewSubQuestions"></pre>
+                </div>
+                <div class="preview-section">
+                    <h4>Scoring Rubric</h4>
+                    <pre id="previewRubric"></pre>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing document and generating score...</p>
+                <p style="font-size: 0.9rem; color: #718096;">This may take 30-60 seconds</p>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <p>No scoring questions available.</p>
+                <a href="/scoring-questions" class="btn" style="display: inline-block; margin-top: 1rem;">Create Questions</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section">
+            <h2 class="section-title">Scoring Results</h2>
+
+            <div id="resultsContainer">
+                {% if existing_results %}
+                    {% for result in existing_results %}
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="result-question">{{ result.question_text }}</div>
+                            <div class="score-badge {{ 'low' if result.score < 2.5 else ('medium' if result.score < 4.0 else 'high') }}">
+                                {{ result.score }}
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <h4>Answer from Document</h4>
+                            <p>{{ result.main_answer }}</p>
+                        </div>
+
+                        <div class="result-section">
+                            <h4>Scoring Reasoning</h4>
+                            <p>{{ result.reasoning }}</p>
+                        </div>
+
+                        <div class="timestamp">
+                            Scored at: {{ result.scored_at }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <p>No scoring results yet. Select a question above to start scoring.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = {{ questions | tojson }};
+        const documentId = {{ document.id }};
+
+        function previewQuestion() {
+            const select = document.getElementById('questionSelect');
+            const questionId = parseInt(select.value);
+            const applyBtn = document.getElementById('applyBtn');
+            const preview = document.getElementById('questionPreview');
+
+            if (!questionId) {
+                preview.classList.remove('active');
+                applyBtn.disabled = true;
+                return;
+            }
+
+            const question = questions.find(q => q.id === questionId);
+            if (!question) return;
+
+            document.getElementById('previewQuestion').textContent = question.question_text;
+            document.getElementById('previewSubQuestions').textContent = question.sub_questions;
+            document.getElementById('previewRubric').textContent = question.rubric;
+
+            preview.classList.add('active');
+            applyBtn.disabled = false;
+        }
+
+        async function applyQuestion() {
+            const select = document.getElementById('questionSelect');
+            const questionId = parseInt(select.value);
+
+            if (!questionId) return;
+
+            const loading = document.getElementById('loading');
+            const applyBtn = document.getElementById('applyBtn');
+
+            loading.classList.add('active');
+            applyBtn.disabled = true;
+
+            try {
+                const response = await fetch(`/api/document/${documentId}/apply-question`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question_id: questionId })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Reload page to show new result
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.error);
+                    loading.classList.remove('active');
+                    applyBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to apply question. Please try again.');
+                loading.classList.remove('active');
+                applyBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

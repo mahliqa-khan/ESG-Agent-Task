@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoring Questions Library - ESG Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .nav {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .nav a {
+            color: #667eea;
+            text-decoration: none;
+            margin-right: 1rem;
+        }
+
+        .nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #48bb78;
+        }
+
+        .btn-secondary:hover {
+            background: #38a169;
+        }
+
+        .btn-danger {
+            background: #f56565;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        .questions-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .question-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .question-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            flex: 1;
+        }
+
+        .question-category {
+            background: #e6fffa;
+            color: #319795;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-left: 1rem;
+        }
+
+        .question-section {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+
+        .question-section h4 {
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .question-section pre {
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #2d3748;
+        }
+
+        .question-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            color: #2d3748;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .empty-state h3 {
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            color: #718096;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Scoring Questions Library</h1>
+        <p>Manage your custom scoring questions with rubrics</p>
+    </div>
+
+    <div class="nav">
+        <a href="/dashboard">← Back to Dashboard</a>
+    </div>
+
+    <div class="container">
+        <div class="action-bar">
+            <h2>Your Scoring Questions</h2>
+            <button class="btn" onclick="openAddModal()">+ Add New Question</button>
+        </div>
+
+        <div class="questions-grid" id="questionsGrid">
+            {% if questions %}
+                {% for q in questions %}
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-title">{{ q.question_text }}</div>
+                        {% if q.category %}
+                        <div class="question-category">{{ q.category }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="question-section">
+                        <h4>Sub-Questions / Criteria</h4>
+                        <pre>{{ q.sub_questions }}</pre>
+                    </div>
+
+                    <div class="question-section">
+                        <h4>Scoring Rubric (1-5)</h4>
+                        <pre>{{ q.rubric }}</pre>
+                    </div>
+
+                    <div class="question-actions">
+                        <button class="btn btn-secondary btn-small" onclick="editQuestion({{ q.id }})">Edit</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteQuestion({{ q.id }})">Delete</button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <h3>No Scoring Questions Yet</h3>
+                    <p>Add your first scoring question to get started evaluating documents.</p>
+                    <button class="btn" onclick="openAddModal()">+ Add Your First Question</button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div class="modal" id="questionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Scoring Question</h2>
+            </div>
+
+            <form id="questionForm">
+                <input type="hidden" id="questionId">
+
+                <div class="form-group">
+                    <label for="questionText">Main Question</label>
+                    <textarea id="questionText" required placeholder="Enter the main question to be answered from the document..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category (Optional)</label>
+                    <input type="text" id="category" placeholder="e.g., Employee Engagement, Governance, etc.">
+                </div>
+
+                <div class="form-group">
+                    <label for="subQuestions">Sub-Questions / Evaluation Criteria</label>
+                    <textarea id="subQuestions" required placeholder="List the specific criteria to evaluate the answer against...
+
+Example:
+- Are you tracking employee satisfaction?
+- What data do you collect?
+- Is the survey audited by an independent third party?
+- What are your targets?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="rubric">Scoring Rubric (1-5 scale)</label>
+                    <textarea id="rubric" required placeholder="Define what each score level means...
+
+Example:
+1 point: No tracking, no disclosure
+2 points: Limited disclosure, no targets
+3 points: Good disclosure with some targets
+4 points: Comprehensive disclosure with clear targets
+5 points: Best-in-class, fully transparent"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn">Save Question</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const questions = {{ questions | tojson }};
+
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = 'Add Scoring Question';
+            document.getElementById('questionForm').reset();
+            document.getElementById('questionId').value = '';
+            document.getElementById('questionModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('questionModal').classList.remove('active');
+        }
+
+        function editQuestion(id) {
+            const question = questions.find(q => q.id === id);
+            if (!question) return;
+
+            document.getElementById('modalTitle').textContent = 'Edit Scoring Question';
+            document.getElementById('questionId').value = question.id;
+            document.getElementById('questionText').value = question.question_text;
+            document.getElementById('category').value = question.category || '';
+            document.getElementById('subQuestions').value = question.sub_questions;
+            document.getElementById('rubric').value = question.rubric;
+            document.getElementById('questionModal').classList.add('active');
+        }
+
+        async function deleteQuestion(id) {
+            if (!confirm('Are you sure you want to delete this question?')) return;
+
+            try {
+                const response = await fetch(`/api/scoring-questions/${id}/delete`, {
+                    method: 'POST'
+                });
+
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Failed to delete question');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error deleting question');
+            }
+        }
+
+        document.getElementById('questionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const id = document.getElementById('questionId').value;
+            const data = {
+                question_text: document.getElementById('questionText').value,
+                category: document.getElementById('category').value,
+                sub_questions: document.getElementById('subQuestions').value,
+                rubric: document.getElementById('rubric').value
+            };
+
+            try {
+                const url = id ? `/api/scoring-questions/${id}/edit` : '/api/scoring-questions/add';
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Failed to save question');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error saving question');
+            }
+        });
+
+        // Close modal on outside click
+        document.getElementById('questionModal').addEventListener('click', (e) => {
+            if (e.target.id === 'questionModal') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

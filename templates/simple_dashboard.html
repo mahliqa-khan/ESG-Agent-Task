@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESG Document Scoring Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .upload-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f7fafc;
+        }
+
+        .upload-area:hover {
+            border-color: #5a67d8;
+            background: #edf2f7;
+            transform: scale(1.01);
+        }
+
+        .upload-area.dragover {
+            border-color: #5a67d8;
+            background: #e6fffa;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .files-list {
+            margin-top: 1.5rem;
+        }
+
+        .file-item {
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-name {
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .file-size {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-left: 1rem;
+        }
+
+        .remove-file {
+            background: #f56565;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .remove-file:hover {
+            background: #e53e3e;
+        }
+
+        .questions-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .questions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .select-all-btn {
+            background: #48bb78;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .select-all-btn:hover {
+            background: #38a169;
+        }
+
+        .question-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .question-item {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .question-item:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+        }
+
+        .question-item.selected {
+            border-color: #667eea;
+            background: #edf2f7;
+        }
+
+        .question-checkbox {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .question-checkbox input[type="checkbox"] {
+            margin-top: 0.25rem;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .question-text {
+            flex: 1;
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .question-category {
+            background: #e6fffa;
+            color: #319795;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .processing {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .processing.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-questions {
+            text-align: center;
+            padding: 3rem;
+            color: #718096;
+        }
+
+        .manage-questions-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .manage-questions-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 ESG Document Scoring Platform</h1>
+        <p>Upload documents and apply scoring questions with AI-powered analysis</p>
+        <div class="header-actions">
+            <a href="/scoring-questions" class="btn btn-secondary">⭐ Manage Scoring Questions</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <h2 class="section-title">📄 Upload Documents</h2>
+
+            <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">Click to upload or drag and drop</div>
+                <div class="upload-hint">You can upload multiple PDF documents (max 50MB each)</div>
+                <input type="file" id="fileInput" accept=".pdf" multiple>
+            </div>
+
+            <div class="files-list" id="filesList"></div>
+        </div>
+
+        <!-- Questions Selection Section -->
+        <div class="questions-section">
+            <div class="questions-header">
+                <h2 class="section-title" style="margin: 0;">⭐ Select Questions to Apply</h2>
+                <button class="select-all-btn" onclick="toggleSelectAll()">
+                    <span id="selectAllText">Select All</span>
+                </button>
+            </div>
+
+            {% if questions %}
+            <div class="question-list">
+                {% for q in questions %}
+                <div class="question-item" onclick="toggleQuestion({{ q.id }})">
+                    <div class="question-checkbox">
+                        <input type="checkbox" id="q{{ q.id }}" value="{{ q.id }}" onclick="event.stopPropagation(); updateSelectionCount();">
+                        <div>
+                            <div class="question-text">{{ q.question_text }}</div>
+                            {% if q.category %}
+                            <span class="question-category">{{ q.category }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-questions">
+                <p>No scoring questions available.</p>
+                <p><a href="/scoring-questions" class="manage-questions-link">Create your first question →</a></p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Action Bar -->
+        {% if questions %}
+        <div class="action-bar">
+            <button class="btn btn-primary" id="processBtn" onclick="processDocuments()" disabled>
+                🚀 Process Documents (<span id="selectionCount">0</span> questions selected)
+            </button>
+        </div>
+        {% endif %}
+
+        <!-- Processing Indicator -->
+        <div class="processing" id="processing">
+            <div class="spinner"></div>
+            <h3>Processing Documents...</h3>
+            <p>Analyzing documents and applying scoring questions</p>
+            <p style="color: #718096; font-size: 0.9rem;">This may take 1-2 minutes per document</p>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const filesList = document.getElementById('filesList');
+        const processBtn = document.getElementById('processBtn');
+        let selectedFiles = [];
+        const questions = {{ questions | tojson }};
+
+        // File upload handling
+        fileInput.addEventListener('change', handleFiles);
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            handleFiles({ target: { files } });
+        });
+
+        function handleFiles(e) {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                if (file.type === 'application/pdf' && !selectedFiles.find(f => f.name === file.name)) {
+                    selectedFiles.push(file);
+                }
+            });
+            renderFilesList();
+            updateProcessButton();
+        }
+
+        function renderFilesList() {
+            if (selectedFiles.length === 0) {
+                filesList.innerHTML = '';
+                return;
+            }
+
+            filesList.innerHTML = selectedFiles.map((file, index) => `
+                <div class="file-item">
+                    <div>
+                        <span class="file-name">📄 ${file.name}</span>
+                        <span class="file-size">(${(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+                    </div>
+                    <button class="remove-file" onclick="removeFile(${index})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            renderFilesList();
+            updateProcessButton();
+        }
+
+        // Question selection
+        function toggleQuestion(id) {
+            const checkbox = document.getElementById('q' + id);
+            checkbox.checked = !checkbox.checked;
+            updateSelectionCount();
+        }
+
+        function toggleSelectAll() {
+            const checkboxes = document.querySelectorAll('.question-item input[type="checkbox"]');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+            checkboxes.forEach(cb => cb.checked = !allChecked);
+            document.getElementById('selectAllText').textContent = allChecked ? 'Select All' : 'Deselect All';
+            updateSelectionCount();
+        }
+
+        function updateSelectionCount() {
+            const selectedQuestions = document.querySelectorAll('.question-item input[type="checkbox"]:checked');
+            document.getElementById('selectionCount').textContent = selectedQuestions.length;
+
+            // Update Select All button text
+            const allCheckboxes = document.querySelectorAll('.question-item input[type="checkbox"]');
+            const allChecked = Array.from(allCheckboxes).every(cb => cb.checked);
+            document.getElementById('selectAllText').textContent = allChecked ? 'Deselect All' : 'Select All';
+
+            updateProcessButton();
+        }
+
+        function updateProcessButton() {
+            const selectedQuestions = document.querySelectorAll('.question-item input[type="checkbox"]:checked');
+            processBtn.disabled = selectedFiles.length === 0 || selectedQuestions.length === 0;
+        }
+
+        async function processDocuments() {
+            const selectedQuestionIds = Array.from(
+                document.querySelectorAll('.question-item input[type="checkbox"]:checked')
+            ).map(cb => parseInt(cb.value));
+
+            if (selectedFiles.length === 0) {
+                alert('Please upload at least one document');
+                return;
+            }
+
+            if (selectedQuestionIds.length === 0) {
+                alert('Please select at least one question');
+                return;
+            }
+
+            // Show processing indicator
+            document.getElementById('processing').classList.add('active');
+            processBtn.disabled = true;
+
+            // Upload and process documents
+            const formData = new FormData();
+            selectedFiles.forEach(file => {
+                formData.append('documents', file);
+            });
+            formData.append('question_ids', JSON.stringify(selectedQuestionIds));
+
+            try {
+                const response = await fetch('/api/process-documents', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Redirect to results page
+                    window.location.href = '/results/' + result.session_id;
+                } else {
+                    alert('Error: ' + result.error);
+                    document.getElementById('processing').classList.remove('active');
+                    processBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to process documents. Please try again.');
+                document.getElementById('processing').classList.remove('active');
+                processBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
