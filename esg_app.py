@@ -1250,14 +1250,10 @@ If the information is not in the document, state "Not disclosed" and score appro
         # Parse response
         parsed = parse_fast_scoring_response(response)
 
-        # Clean up any JSON artifacts in the parsed response
-        clean_answer = str(parsed['answer']).replace('{', '').replace('}', '').strip()
-        clean_reasoning = str(parsed['reasoning']).replace('{', '').replace('}', '').strip()
-
         return {
-            'main_answer': clean_answer,
+            'main_answer': parsed['answer'],
             'score': parsed['score'],
-            'reasoning': clean_reasoning
+            'reasoning': parsed['reasoning']
         }
 
     except Exception as e:
