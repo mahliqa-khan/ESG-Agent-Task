@@ -632,6 +632,11 @@
 
         // NEW: Process markdown formatting for bold headers and bullets
         function processMarkdown(text) {
+            // Safety check: return empty string if text is null/undefined
+            if (!text || typeof text !== 'string') {
+                return '';
+            }
+
             // Convert **Header:** to HTML bold
             text = text.replace(/\*\*([^*]+):\*\*/g, '<strong>$1:</strong>');
             text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
