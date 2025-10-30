@@ -1577,20 +1577,13 @@ IMPORTANT:
 
                         formatted_answer = ""
                         if summary:
-                            # Clean up any JSON artifacts
-                            summary_clean = str(summary).replace('{', '').replace('}', '').strip()
-                            formatted_answer += f"**Summary:**\n{summary_clean}\n\n"
+                            formatted_answer += f"**Summary:**\n{summary}\n\n"
                         if analysis:
-                            # Clean up any JSON artifacts
-                            analysis_clean = str(analysis).replace('{', '').replace('}', '').strip()
-                            formatted_answer += f"**Analysis:**\n{analysis_clean}\n\n"
+                            formatted_answer += f"**Analysis:**\n{analysis}\n\n"
                         if findings and len(findings) > 0:
                             formatted_answer += "**Key Findings:**\n"
                             for finding in findings:
-                                # Ensure finding is a string and clean up any artifacts
-                                finding_str = str(finding).replace('{', '').replace('}', '').strip()
-                                if finding_str:  # Only add non-empty findings
-                                    formatted_answer += f"• {finding_str}\n"
+                                formatted_answer += f"• {finding}\n"
 
                         # If we still have no content, use the raw response
                         if not formatted_answer or len(formatted_answer.strip()) < 20:
