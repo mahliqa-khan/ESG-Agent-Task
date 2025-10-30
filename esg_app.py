@@ -1225,17 +1225,12 @@ SCORING RUBRIC (1-5 scale):
 INSTRUCTIONS:
 1. Find relevant information in the document to answer the question
 2. Score the answer based on how well it meets the evaluation criteria
-3. Provide detailed reasoning that explains WHY the answer is valid
+3. Provide reasoning for the score
 
 FORMAT YOUR RESPONSE EXACTLY AS:
 ANSWER: [Your answer from the document - be specific with data/quotes]
 SCORE: [number between 1.0 and 5.0 in 0.5 increments]
-REASONING: [Explain WHY this answer is valid by citing:
-- Specific evidence from the document (sections, page numbers, quotes)
-- How each part of the answer meets the evaluation criteria
-- Why the components listed qualify as valid answers
-- Logical justification connecting the evidence to the question
-Do NOT just repeat the answer - explain the reasoning behind it]
+REASONING: [Why you gave this score based on the rubric]
 
 If the information is not in the document, state "Not disclosed" and score appropriately."""
 
