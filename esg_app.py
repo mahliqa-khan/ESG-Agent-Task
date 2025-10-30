@@ -2352,7 +2352,7 @@ Provide a helpful, well-formatted answer based on the analyzed documents and con
         response = client.chat.completions.create(
             model=model_name,
             messages=[{"role": "user", "content": chat_prompt}],
-            max_tokens=1000,
+            max_tokens=2500,
             temperature=0.7
         )
 
