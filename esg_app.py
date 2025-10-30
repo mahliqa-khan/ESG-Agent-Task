@@ -1230,17 +1230,12 @@ INSTRUCTIONS:
 FORMAT YOUR RESPONSE EXACTLY AS:
 ANSWER: [Your answer from the document - be specific with data/quotes]
 SCORE: [number between 1.0 and 5.0 in 0.5 increments]
-REASONING: [Provide comprehensive reasoning covering:
-1. WHY the answer is valid:
-   - Cite specific evidence (sections, page numbers, quotes)
-   - Explain how each component meets the evaluation criteria
-   - Justify why the listed items qualify as valid answers
-2. WHY this specific score was given:
-   - Reference the scoring rubric levels (1.0-5.0)
-   - Explain which rubric criteria were met vs. not met
-   - Justify why it's this score and not higher/lower
-   - Connect the quality/completeness of evidence to the score
-Do NOT just repeat the answer - provide analytical reasoning]
+REASONING: [Explain WHY this answer is valid by citing:
+- Specific evidence from the document (sections, page numbers, quotes)
+- How each part of the answer meets the evaluation criteria
+- Why the components listed qualify as valid answers
+- Logical justification connecting the evidence to the question
+Do NOT just repeat the answer - explain the reasoning behind it]
 
 If the information is not in the document, state "Not disclosed" and score appropriately."""
 
