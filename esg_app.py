@@ -2282,9 +2282,9 @@ def parse_multi_question_response(response_text, questions):
 
 @app.route('/api/chat-with-docs', methods=['POST'])
 def chat_with_docs():
-    """Chat with Gemini about analyzed documents - WITH CONVERSATION MEMORY"""
+    """Chat with Qwen3-30B about analyzed documents - WITH CONVERSATION MEMORY"""
     try:
-        import google.generativeai as genai
+        from openai import OpenAI
 
         data = request.get_json()
         user_message = data.get('message')
@@ -2294,9 +2294,12 @@ def chat_with_docs():
         if not user_message:
             return jsonify({'success': False, 'error': 'No message provided'}), 400
 
-        # Configure Gemini
-        genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
-        model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        # Configure OpenRouter with Qwen3-30B
+        client = OpenAI(
+            base_url="https://openrouter.ai/api/v1",
+            api_key=os.getenv('OPENROUTER_API_KEY')
+        )
+        model_name = 'qwen/qwen3-30b-a3b:free'
 
         # Build context from analyzed documents
         context = "ANALYZED DOCUMENTS:\n\n"
@@ -2341,12 +2344,17 @@ FORMAT EXAMPLE:
 
 Provide a helpful, well-formatted answer based on the analyzed documents and conversation history above."""
 
-        # Get response
-        response = model.generate_content(chat_prompt, request_options={"timeout": 30})
+        # Get response from Qwen3-30B
+        response = client.chat.completions.create(
+            model=model_name,
+            messages=[{"role": "user", "content": chat_prompt}],
+            max_tokens=1000,
+            temperature=0.7
+        )
 
         return jsonify({
             'success': True,
-            'response': response.text
+            'response': response.choices[0].message.content
         })
 
     except Exception as e:
