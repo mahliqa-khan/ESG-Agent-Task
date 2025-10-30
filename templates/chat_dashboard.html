@@ -730,6 +730,30 @@
                     }
                 });
             }
+
+            // Restore saved inputs from localStorage
+            const questionsInput = document.getElementById('questionsInput');
+            const scoringCriteriaInput = document.getElementById('scoringCriteriaInput');
+
+            // Load saved values (only if they exist, otherwise keep defaults)
+            const savedQuestions = localStorage.getItem('questionsInput');
+            const savedScoring = localStorage.getItem('scoringCriteriaInput');
+
+            if (savedQuestions !== null) {
+                questionsInput.value = savedQuestions;
+            }
+            if (savedScoring !== null) {
+                scoringCriteriaInput.value = savedScoring;
+            }
+
+            // Save to localStorage whenever user types
+            questionsInput.addEventListener('input', () => {
+                localStorage.setItem('questionsInput', questionsInput.value);
+            });
+
+            scoringCriteriaInput.addEventListener('input', () => {
+                localStorage.setItem('scoringCriteriaInput', scoringCriteriaInput.value);
+            });
         });
 
         // Poll job status until complete
